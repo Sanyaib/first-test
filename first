@@ -1,0 +1,51 @@
+from PIL import Image, ImageTk
+
+import tkinter as tk
+import ttkbootstrap as ttb
+from ttkbootstrap.constants import *
+from datetime import *
+
+class ClockApp:
+    def __init__(self):
+        self.root = ttb.Window(themename="darkly")
+        self.root.title("Clock")
+        self.root.geometry("500x500")
+        self.root.resizable(False, False)
+        self.root.iconphoto(False, ImageTk.PhotoImage(file="clock_icon.png"))
+
+        self.side_panel = ttb.Frame(self.root, width=75, height=500, bootstyle="info")
+        self.side_panel.grid(rowspan=4, column=0)
+
+        clock_image = Image.open("clock_icon.png")
+        resized_clock = clock_image.resize((50, 50))
+        timer_image = Image.open("timer_icon.png")
+        resized_timer = timer_image.resize((50, 50))
+
+        used_clock_image = ImageTk.PhotoImage(resized_clock)
+        used_timer_image = ImageTk.PhotoImage(resized_timer)
+
+        self.clock_button = ttb.Button(self.root, image=used_clock_image, bootstyle=INFO)
+        self.clock_button.image = used_clock_image
+        self.clock_button.grid(row=0, column=0)
+
+        self.timer_button = ttb.Button(self.root, image=used_timer_image, bootstyle=INFO)
+        self.timer_button.image = used_timer_image
+        self.timer_button.grid(row=1, column=0)
+
+
+        pass
+
+
+if __name__ == '__main__':
+    clock = ClockApp()
+
+    now_time = datetime.now()
+    string_time = now_time.strftime("%H : %M : %S")
+
+    time_frame = ttb.Frame(clock.root)
+    time_frame.grid(row=1, column=1)
+
+    time_label = ttb.Label(time_frame, text=string_time,
+                           font=("Arial Greek", 32, "bold"), bootstyle=INFO)
+    time_label.grid(row=1, column=0, padx=100)
+    clock.update_time()
